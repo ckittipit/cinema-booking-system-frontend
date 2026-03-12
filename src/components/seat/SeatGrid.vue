@@ -10,7 +10,9 @@
                     :key="seat.seat_id"
                     type="button"
                     class="min-w-[52px] rounded-lg px-3 py-2 text-sm font-medium"
-                    :class="seatClass(seat.status)"
+                    :class="seatClass(seat)"
+                    :disabled="seat.status !== 'AVAILABLE'",
+                    @click="handleClickSeat(seat)"
                 >
                     {{ seat.seat_id }}
                 </button>
@@ -24,18 +26,25 @@ import { computed } from 'vue'
 import type { Seat } from '../../types/seat'
 
 const props = defineProps<{
-    seats: Seat[]
+    seats: Seat[],
+    selectedSeatId?: string
 }>()
 
-const seatClass = (status: Seat['status']) => { 
-    switch (status) { 
-        case 'BOOKED': 
-            return 'bg-red-500'
-        case 'LOCKED':
-            return 'bg-amber-500'
-        default:
-            return 'bg-green-500'
-    }
+const emit = defineEmits<{
+    (e: 'select-seat', seat: Seat): void
+}>()
+
+const seatClass = (seat: Seat) => { 
+    if (seat.status === 'BOOKED') return 'bg-red-500 text-white cursor-not-allowed'
+    if (seat.status === 'LOCKED') return 'bg-amber-500 text-white cursor-not-allowed'
+    if (seat.seat_id === props.selectedSeatId) return 'bg-blue-600 text-white'
+    return 'bg-green-500 text-white hover:opacity-90 cursor-pointer'
+}
+
+const handleClickSeat = (seat: Seat) => { 
+    console.log(seat)
+    if (seat.status !== 'AVAILABLE') return
+    emit('select-seat', seat)
 }
 
 const groupedSeats = computed(() => { 
