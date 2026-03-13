@@ -8,11 +8,25 @@
             </span>
         </p>
         <p class="mt-2 text-sm text-slate-600">
+            Locked seat: 
+            <span class="font-semibold text-slate-900">{{ lockedSeatId || '-' }}</span>
+        </p>
+        <p class="mt-2 text-sm text-slate-600">
             Price: 
             <span class="font-semibold text-slate-900">250</span>
         </p>
+        <p v-if="lockedSeatId && countdownText" class="mt-2 text-sm text-red-600">
+            Time remaining: {{ countdownText }}
+        </p>
         <p v-if="error" class="mt-3 text-sm text-red-600">{{ error }}</p>
         <div class="mt-4 flex gap-3">
+            <button class="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+                type="button"
+                :disabled="!selectedSeatId || !!lockedSeatId || loading"
+                @click="$emit('lock')"
+            >
+                {{ loading ? 'Processing' : 'Lock Seat' }}
+            </button>
             <button class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
                 type="button"
                 :disabled="!selectedSeatId || loading"
@@ -33,11 +47,14 @@
 <script setup lang="ts">
 defineProps<{
     selectedSeatId: string
+    lockedSeatId?: string
+    countdownText?: string
     loading?: boolean
     error?: string
 }>()
 
 defineEmits<{
+    (e: 'lock'): void
     (e: 'confirm'): void
     (e: 'clear'): void
 }>()

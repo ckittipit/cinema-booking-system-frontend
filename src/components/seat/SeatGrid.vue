@@ -14,7 +14,7 @@
                     :disabled="seat.status !== 'AVAILABLE'",
                     @click="handleClickSeat(seat)"
                 >
-                    {{ seat.seat_id }}
+                    {{ seat.seat_id }} {{ seat.status }}
                 </button>
             </div>
         </div>

@@ -24,8 +24,11 @@
                     />
                     <BookingSummary 
                         :selected-seat-id="bookingStore.selectedSeatId"
+                        :locked-seat-id="bookingStore.lockedBooking?.seat_id"
+                        :countdown-text="bookingStore.countdownText"
                         :loading="bookingStore.loading"
                         :error="bookingStore.error"
+                        @lock="handleLockSeat"
                         @confirm="handleConfirmbBooking"
                         @clear="handleClearSeat"
                     />
@@ -43,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useShowtimeStore } from '../stores/showtime.store'
@@ -64,25 +67,38 @@ const bookingStore = useBookingStore()
 
 const showtimeId = computed(() => String(route.params.showtimeId || ''))
 
+const fetchSeatMap = async () => { 
+    if (showtimeId.value) await showtimeStore.fetchSeatMap(showtimeId.value)
+}
+
 const handleSelecteSeat = (seat: Seat) => { 
     bookingStore.selectSeat(seat.seat_id)
 }
-const handleClearSeat = () => { 
-    bookingStore.clearSelectedSeat()
+const handleClearSeat = async () => { 
+    bookingStore.clearLockState()
+    await fetchSeatMap()
+}
+const handleLockSeat = async () => { 
+    if (!showtimeId.value) return
+
+    const result = await bookingStore.lockSelectedSeat(showtimeId.value, 250)
+    if (result) await fetchSeatMap()
 }
 const handleConfirmbBooking = async () => { 
     if (!showtimeId.value) return
 
-    const result = await bookingStore.confirmSelectedBooking(showtimeId.value, 250)
-    if (result) { 
-        await showtimeStore.fetchSeatMap(showtimeId.value)
-        bookingStore.clearSelectedSeat()
-    }
+    const result = await bookingStore.confirmLockedBooking()
+    if (result) await fetchSeatMap()
 }
 
-onMounted(() => { 
-    if (showtimeId.value) showtimeStore.fetchSeatMap(showtimeId.value)
+onMounted(async () => { 
+    bookingStore.clearLockState()
+    await fetchSeatMap()
 })
+
+onUnmounted(() => { 
+    bookingStore.clearLockState()
+}) 
 </script>
 
 <style scoped>
