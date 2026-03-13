@@ -52,6 +52,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useShowtimeStore } from '../stores/showtime.store'
 import { useBookingStore } from '../stores/booking.store'
 import type { Seat } from '../types/seat'
+import { showtimeWebsocketService } from '../services/websocket.service'
 
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import LoadingState from '../components/common/LoadingState.vue'
@@ -106,10 +107,17 @@ watch(
 onMounted(async () => { 
     bookingStore.clearLocalLockState()
     await fetchSeatMap()
+
+    if (showtimeId.value) { 
+        showtimeWebsocketService.connect(showtimeId.value, async () => { 
+            await fetchSeatMap()
+        })
+    }
 })
 
 onUnmounted(() => { 
     bookingStore.clearLocalLockState()
+    showtimeWebsocketService.disconnect()
 }) 
 </script>
 
