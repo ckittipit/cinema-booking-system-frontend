@@ -11,3 +11,7 @@ export const confirmBooking = async (bookingId: string): Promise<Booking> => {
     const response = await api.post<ApiResponse<Booking>>(`/api/v1/bookings/${bookingId}/confirm`)
     return response.data.data
 }
+
+export const releaseBooking = async (bookingId: string): Promise<void> => { 
+    await api.post(`/api/v1/bookings/${bookingId}/release`)
+}

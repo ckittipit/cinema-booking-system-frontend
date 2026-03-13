@@ -11,7 +11,7 @@ export interface LockSeatPayload {
 }
 
 export interface Booking { 
-    id: string
+    ID: string
     user_id: string
     showtim_id: string
     seat_id: string

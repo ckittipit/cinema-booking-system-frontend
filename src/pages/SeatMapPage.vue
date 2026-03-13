@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useShowtimeStore } from '../stores/showtime.store'
@@ -75,8 +75,10 @@ const handleSelecteSeat = (seat: Seat) => {
     bookingStore.selectSeat(seat.seat_id)
 }
 const handleClearSeat = async () => { 
-    bookingStore.clearLockState()
-    await fetchSeatMap()
+    // console.log('zxczx')
+    const relesed = await bookingStore.releaseLockedBooking()
+    // console.log(relesed)
+    if (relesed) await fetchSeatMap()
 }
 const handleLockSeat = async () => { 
     if (!showtimeId.value) return
@@ -91,13 +93,23 @@ const handleConfirmbBooking = async () => {
     if (result) await fetchSeatMap()
 }
 
+watch(
+    () => bookingStore.countdown,
+    async (value) => { 
+        if (value === 0 && bookingStore.lockedBooking) { 
+            bookingStore.clearLocalLockState()
+            await fetchSeatMap()
+        }
+    }
+)
+
 onMounted(async () => { 
-    bookingStore.clearLockState()
+    bookingStore.clearLocalLockState()
     await fetchSeatMap()
 })
 
 onUnmounted(() => { 
-    bookingStore.clearLockState()
+    bookingStore.clearLocalLockState()
 }) 
 </script>
 
