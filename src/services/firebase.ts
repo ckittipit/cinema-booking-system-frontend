@@ -9,6 +9,6 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
-
+// console.log('import.meta.env.VITE_FIREBASE_API_KEY: ', import.meta.env.VITE_FIREBASE_API_KEY)
 export const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
