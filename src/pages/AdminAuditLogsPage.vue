@@ -16,7 +16,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(log, index) in logs" :key="log.id" class="border-t">
+                        <tr v-for="(log) in logs" :key="log.id" class="border-t">
                             <td class="px-4 py-3">{{ log.event_type }}</td>
                             <td class="px-4 py-3">{{ log.seat_id }}</td>
                             <td class="px-4 py-3">{{ log.message }}</td>

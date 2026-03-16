@@ -3,6 +3,7 @@ import MoviesPage from '../pages/MoviesPage.vue'
 import ShowtimePage from '../pages/ShowtimePage.vue'
 import SeatMapPage from '../pages/SeatMapPage.vue'
 import NotFoundPage from '../pages/NotFoundPage.vue'
+import LoginPage from '../pages/LoginPage.vue'
 
 import AdminBookingsPage from '../pages/AdminBookingsPage.vue'
 import AdminAuditLogsPage from '../pages/AdminAuditLogsPage.vue'
@@ -14,6 +15,11 @@ const router = createRouter({
             path: '/',
             name: 'movies',
             component: MoviesPage
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginPage
         },
         {
             path: '/movies/:movieId/showtimes',
@@ -29,7 +35,8 @@ const router = createRouter({
             path: '/admin/bookings',
             name: 'admin-bookings',
             component: AdminBookingsPage
-        },{
+        },
+        {
             path: '/admin/audit-logs',
             name: 'nadmin-audit-logs',
             component: AdminAuditLogsPage

@@ -16,7 +16,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(booking, index) in bookings" :key="booking.id" class="border-t">
+                        <tr v-for="(booking) in bookings" :key="booking.id" class="border-t">
                             <td class="px-4 py-3">{{ booking.seat_id }}</td>
                             <td class="px-4 py-3">{{ booking.status }}</td>
                             <td class="px-4 py-3">{{ booking.showtime_id }}</td>

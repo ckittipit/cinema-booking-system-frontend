@@ -6,7 +6,7 @@
             </button>
             <h2 class="text-2xl font-bold text-slate-800">Showtimes</h2>
             <p class="text-slate-500">
-                {{ selectedMovie?.title || 'Selected movie' }}
+                {{ selectedMovie || 'Selected movie' }}
             </p>
         </div>
 
@@ -46,7 +46,11 @@ const showtimeStore = useShowtimeStore()
 
 const movieId = computed(() => String(route.params.movieId || ''))
 const selectedMovie = computed(() => { 
-    movieStore.movies.find((movie) => movie.id === movieId.value) 
+    // console.log('movieStore.movies: ', movieStore.movies)
+    // console.log('movieId.value: ', movieId.value)
+    const movie = movieStore.movies.find((movie) => movie.id === movieId.value)
+    console.log('movieStore.movies.find((movie) => movie.id === movieId.value) : ', movie)
+    return movie ? movie.title : undefined
 })
 
 const goToSeatMap = (showtimeId: string) => { 

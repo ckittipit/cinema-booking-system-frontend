@@ -6,7 +6,7 @@
         >
             <div class="w-6 font-semibold text-slate-700">{{ row }}</div>
             <div class="flex flex-wrap gap-2">
-                <button v-for="(seat, index) in rowSeats"
+                <button v-for="(seat) in rowSeats"
                     :key="seat.seat_id"
                     type="button"
                     class="min-w-[52px] rounded-lg px-3 py-2 text-sm font-medium"

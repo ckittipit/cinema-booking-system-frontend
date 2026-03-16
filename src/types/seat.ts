@@ -1,4 +1,4 @@
-import { Showtime } from './movie';
+// import { Showtime } from './movie'
 export type SeatStatus = 'AVAILABLE' | 'LOCKED' | 'BOOKED'
 
 export interface Seat { 
